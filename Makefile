@@ -5,7 +5,7 @@ PORT = /dev/ttyACM0
 PROGRAMMER = usbasp
 
 # Main selection
-MAIN ?= led_driver_main.c
+MAIN ?= hall_effect_main.c
 
 # Directory structure
 BUILD_DIR = build
