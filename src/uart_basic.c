@@ -49,11 +49,12 @@ unsigned char USART_Receive(void){
 }
 
 void USART_Receive_string(char *buffer, int size){
-    int indice = size - 1;
-    while (indice > 0)
+    int indice = 0;
+    while (indice < size)
     {
         buffer[indice] = USART_Receive();
-        indice--;
+                
+        indice++;
     }
 
 }
