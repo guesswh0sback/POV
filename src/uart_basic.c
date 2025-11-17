@@ -1,4 +1,4 @@
-#include "../lib/uart_basic.h"
+#include "uart_basic.h"
 
 
 void USART_Init(uint32_t baudrate){
@@ -9,7 +9,7 @@ void USART_Init(uint32_t baudrate){
     UCSR0A =0;
     UCSR0C =0;
     /* Set baud rate */
-    unsigned int ubrr = (unsigned int)(16000000/8/baudrate-1);
+    unsigned int ubrr = (unsigned int)(13000000/8/baudrate-1);
     UBRR0H = (unsigned char)(ubrr>>8);
     UBRR0L = (unsigned char)ubrr;
     /* Enable receiver and transmitter */

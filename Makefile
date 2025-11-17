@@ -5,7 +5,7 @@ PORT = /dev/ttyACM0
 PROGRAMMER = usbasp
 
 # Main selection
-MAIN ?= hall_effect_main.c
+MAIN ?= bluetooth_com_main.c
 
 # Directory structure
 BUILD_DIR = build

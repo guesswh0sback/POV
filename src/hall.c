@@ -1,10 +1,6 @@
-#include "../lib/hall.h"
+#include "hall.h"
 
 
-volatile uint16_t last_time = 0;
-volatile uint16_t current_time = 0;
-volatile uint16_t time_diff = 0;
-volatile uint8_t first_capture = 1;
 
 
 
@@ -15,6 +11,10 @@ uint16_t ONE_OUT_OF_TWO = 0b1010101010101010;
 uint16_t JUST_ONE_LED =   0b1000000000000001;
 int counter = 0;
 int protection = 1;
+
+
+
+uint32_t time_diff[100];
 
 
 void HALL_init(){
@@ -43,36 +43,30 @@ void TIMER1_init(){
     
 }
 
-// ISR(INT0_vect){
-//     current_time = TCNT1;
+float get_total_time(){
+    uint32_t mean_time = 0;
+    for (int i = 0; i < 100; i++)
+    {
+        mean_time += time_diff[i];
+    }
+    mean_time = mean_time * (256.0 / 13000000.0 / 100.0);
 
-//     display_bourrin(0b0101010101010101, 0.005, 100);
-
-//     if (first_capture){
-//         first_capture = 0;
-//     }
-//     else {
-//         if (current_time >= last_time)
-//             time_diff = current_time - last_time;
-//         else
-//             time_diff = (0xFFFF - last_time) + current_time + 1; // handle overflow
-//     }
-
-//     last_time = current_time;
-// }
+    return ((float)mean_time); //time in seconds
+}
 
 ISR(INT0_vect){
-    if (protection)
-    {
+    if (protection){
+        TCNT1 = 0;  //reset timer
         counter++;
         display_bourrin((1<<(counter%16)), 0.005, 1);
         protection = 0;
     }
-    else
-    {
+    else{
+        if (counter <100)
+        {
+            time_diff[counter] = TCNT1;
+        }
+        
         protection = 1;
     }
 }
-
-
-
