@@ -11,5 +11,4 @@
 void HALL_init();
 void TIMER1_init();
 
-
 #endif /* HALL_H */

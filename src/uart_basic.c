@@ -1,4 +1,4 @@
-#include "../lib/uart_basic.h"
+#include "uart_basic.h"
 
 
 void USART_Init(uint32_t baudrate){

@@ -1,4 +1,4 @@
-#include "../lib/hall.h"
+#include "hall.h"
 
 
 volatile uint16_t last_time = 0;
