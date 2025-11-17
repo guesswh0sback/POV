@@ -53,7 +53,10 @@ void USART_Receive_string(char *buffer, int size){
     while (indice < size)
     {
         buffer[indice] = USART_Receive();
-                
+        if (buffer[indice]=='\r')
+        {
+            break;
+        }     
         indice++;
     }
 
