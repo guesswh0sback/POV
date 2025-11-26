@@ -52,7 +52,7 @@ void LEDS_off_test(){
 
 void data_send_bourrin(uint16_t data){
     /* parse the data to find what leds must be on */
-    for (int i = 15; i > 0; i--)
+    for (int i = 15; i >= 0; i--)
     {
         if(data & (1<<i)){ // looks only at the i-th value of data 
             MOSI_on();

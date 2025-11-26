@@ -5,7 +5,7 @@ PORT = /dev/ttyACM0
 PROGRAMMER = usbasp
 
 # MAIN SELECTION 
-MAIN ?= hall_effect_main.c
+MAIN ?= led_driver_main.c
 
 # Directory structure
 BUILD_DIR = build
@@ -13,18 +13,16 @@ MAIN_DIR = main_s
 
 # Source files
 MAIN_FILE = $(MAIN_DIR)/$(MAIN)
-SRCS := $(wildcard src/*.c) # prends tous les .c de src/
+SRCS = $(wildcard src/*.c) # prends tous les .c de src/
 
-# Object files 
-#(strip to avoid accidental trailing whitespace)
-OBJS := $(strip $(SRCS:%.c=$(BUILD_DIR)/%.o)) # transforme chaque src/.c en build/src/.o
-MAIN_OBJ := $(strip $(BUILD_DIR)/$(MAIN_DIR)/$(MAIN:.c=.o)) # crée le chemin de l'objet principal (compilé séparément)
+# Object files
+OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o) # transforme chaque src/.c en build/src/.o
+MAIN_OBJ = $(BUILD_DIR)/$(MAIN_DIR)/$(MAIN:.c=.o) # crée le chemin de l'objet principal (compilé séparément)
 
-# Derive ELF/BIN directly from MAIN to avoid basename/whitespace issues
-ELF := $(BUILD_DIR)/$(MAIN:.c=.elf)
-BIN := $(BUILD_DIR)/$(MAIN:.c=.bin)
-
- 
+# Output files
+TARGET := $(basename $(MAIN)) # le nom sans .c
+ELF := $(BUILD_DIR)/$(TARGET).elf
+BIN := $(BUILD_DIR)/$(TARGET).bin
 
 # Compiler flags
 CFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os

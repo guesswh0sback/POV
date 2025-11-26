@@ -1,21 +1,26 @@
 #include "timer.h"
 
-time * TIME; // étoile pour pointeur
+static time * TIME = 0;
 
+void time_for_ISR(time * time){
+    TIME = time;
+}
 // Chronomètre
-void timer1_init_1s(){
-    // Set CTC mode (Clear Timer on Compare)
+void timer1_init_1s(time * time)
+{
+    // CTC mode (Clear Timer on Compare)
     TCCR1B |= (1 << WGM12);
-    // Set compare value for 1 second
-    OCR1A = (int)13000000/1024;  // C'est ici que se règle la précision. 
-    //Il peut y avoir une petite imprécision liée au fait que le quaertz n'est pas parfaitement à 13MHz. 
-    //De plus, le résultat est arrondi à l'entier le plus proche.
 
-    // Enable Timer1 Compare Match interrupt
+    // 1 second interrupt at 16 MHz CPU
+    OCR1A = (13000000UL / 1024UL) - 1;   // = 12694
+    // Enable Timer1 Compare A interrupt
     TIMSK1 |= (1 << OCIE1A);
-    // Set prescaler to 1024 (clock/1024)
+
+    // Start timer with 1024 prescaler
     TCCR1B |= (1 << CS12) | (1 << CS10);
-    // Global interrupt enable
+
+    // Enable global interrupts
+    time_for_ISR(time);
     sei();
 }
 
@@ -39,6 +44,7 @@ void timer_update(time * time){
 
 ISR(TIMER1_COMPA_vect){
     timer_update(TIME);
+    display_bourrin(0b1111000000000010, 0.005, 50);
 }
 
 time *get_time(){
