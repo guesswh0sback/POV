@@ -7,7 +7,11 @@
 
 #include "ring_buffer.h"
 
-void USART_Init(uint32_t baudrate);
+
+void buffer_for_ISR(ring_buffer * rx, ring_buffer * tx);
+
+void USART_init(uint32_t baud, ring_buffer * rx, ring_buffer * tx);
+void USART_send_string(char * str);
 void USART_send_byte(uint8_t data);
 bool USART_read_byte(uint8_t *data);
 

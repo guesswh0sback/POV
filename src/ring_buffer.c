@@ -1,5 +1,7 @@
 #include "ring_buffer.h"
 
+
+
 void ring_buffer_init(ring_buffer *ring_buffer) {
     ring_buffer->head = 0;
     ring_buffer->tail = 0;
