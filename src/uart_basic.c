@@ -38,7 +38,6 @@ void uart_send_string(char * str){
         uart_send_byte(str[i]);
         i++;
     }
-    
 }
 
 unsigned char USART_Receive(void){
@@ -59,5 +58,4 @@ void USART_Receive_string(char *buffer, int size){
         }     
         indice++;
     }
-
 }
