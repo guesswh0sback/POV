@@ -1,5 +1,7 @@
 # PROJET PR_359 
-Authors :
+Authors : 
+Quentin Fallito,
+Amandine Garcia
 
 Hardware : 
 
