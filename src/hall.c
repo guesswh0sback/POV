@@ -5,8 +5,8 @@ uint8_t known_position = 0; //flag for
 
 ISR(INT0_vect)
 {
-    display_bourrin(0b1000000000000001, 0.005, 50);
-    INT0_handler();
+    display_bourrin(0b1000000000000001, 0.005, 1);
+    //INT0_handler();
 }
 
 void HALL_init()

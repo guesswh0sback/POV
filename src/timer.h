@@ -13,6 +13,4 @@ typedef struct
    uint8_t h;  
 }time;
 
-
-
 #endif
