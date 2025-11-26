@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "driver.h": "c",
+        "uart_basic.h": "c",
+        "delay.h": "c",
+        "io.h": "c"
+    }
+}

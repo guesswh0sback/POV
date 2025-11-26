@@ -27,7 +27,6 @@ void USART_send_byte(uint8_t data){
     }
 }
 
-
 bool USART_read_byte(uint8_t *data){
     return ring_pop(&rx_buffer, data);
 }

@@ -9,6 +9,7 @@ uint16_t ONE_OUT_OF_TWO_m = 0b1010101010101010;
 
 int main(void) {
     SPI_init();
+    USART_Init(38400);
     for (int i = 0; i < 10; i++) //display startup pattern
     {
         display_bourrin(HALF_LEDS_A_m, 0.005, 50);
