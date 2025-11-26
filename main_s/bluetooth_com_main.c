@@ -1,4 +1,4 @@
-#include "../src/uart_basic.h"
+#include "../src/uart_interrupt.h"
 #include "../src/driver.h"
 #define BAUDRATE 38400
 
