@@ -1,4 +1,4 @@
-#include "display.h"
+#include "display_img.h"
 
 display_index * DISPLAY_INDEX;
 
