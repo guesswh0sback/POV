@@ -1,6 +1,6 @@
 #include "timer.h"
 
-time * TIME;
+time * TIME; // étoile pour pointeur
 
 // Chronomètre
 void timer1_init_1s(){
@@ -41,3 +41,6 @@ ISR(TIMER1_COMPA_vect){
     timer_update(TIME);
 }
 
+time *get_time(){
+    return TIME;
+}

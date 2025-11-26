@@ -1,7 +1,5 @@
 #include "../src/hall.h"
 
-
-
 uint16_t ALL_LEDS_m = 0b1111111111111111;
 uint16_t HALF_LEDS_A_m = 0b0000000011111111;
 uint16_t HALF_LEDS_B_m = 0b1111111100000000;
@@ -26,6 +24,5 @@ int main(void) {
     {
         // Main loop can be empty as functionality is interrupt-driven
     }
-
     return 0;
 }

@@ -14,7 +14,7 @@
 void HALL_init();
 void INT0_handler();
 
-int get_time();
+int get_duration();
 uint8_t get_known_position();
 
 

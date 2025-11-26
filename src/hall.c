@@ -34,7 +34,7 @@ void INT0_handler(){
     known_position = 1; //if interruption is triggered the position is known    
 }
 
-int get_time(){ // return time_per_frame updated by interrupt handler
+int get_duration(){ // return time_per_frame updated by interrupt handler
     return time_per_frame;
 }
 uint8_t get_known_position(){ // checks if POV is at the known position 

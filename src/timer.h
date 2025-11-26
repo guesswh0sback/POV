@@ -1,5 +1,5 @@
-#ifndef HALL_H
-#define HALL_H
+#ifndef TIMER_H
+#define TIMER_H
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -10,7 +10,9 @@ typedef struct
 {
    uint8_t s;
    uint8_t m;
-   uint8_t h;  
-}time;
+   uint8_t h;
+} time;
 
-#endif
+time *get_time();
+
+#endif /* TIMER_H */
