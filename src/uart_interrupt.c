@@ -52,15 +52,9 @@ bool USART_read_byte(uint8_t *data)
     return ring_buffer_pop(rx_buffer, data);
 }
 
-<<<<<<< HEAD
 void buffer_for_ISR(ring_buffer * rx, ring_buffer * tx){
     rx_buffer = rx;
     tx_buffer = tx;
-=======
-ISR(USART_RX_vect){ // interrupt reciver
-    uint8_t data = UDR0;          // read UART data
-    ring_buffer_push(&rx_buffer, data);  // store in RX ring buffer
->>>>>>> 627e58edea6117fbfa1b4f49065958dff7119f5e
 }
 
 ISR(USART_RX_vect)
