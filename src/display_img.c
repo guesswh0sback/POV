@@ -7,7 +7,7 @@ void set_display_index(display_index * INDEX, int max){
     INDEX->index = 0; // reset index to the begining
     INDEX->max_index = max; // set max
     INDEX->overflow = 0; // reset overflow flag
-    INDEX->time = get_time(); // use hall function do set a new time per frame
+    //INDEX->time = get_time(); // use hall function do set a new time per frame
 }
 
 void check_INDEX(display_index * INDEX){
