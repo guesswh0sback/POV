@@ -70,28 +70,11 @@ void data_send_bourrin(uint16_t data){
 }
 
 
-void set_brightness(float percentage, int time_ms){
-    int period = 1000; //us
-    for (int i = 0; i < (int)(time_ms*1000/period); i++){ // set brightness for 'time_ms' ms
-
-        for (int i = 0; i < (int)(percentage*period); i++){ // PMW with 'percentage' duty cycle
-            LEDS_on();
-            _delay_us(1);
-        }
-        LEDS_off();
-        for (int i = 0; i < period-(int)(percentage*period); i++){
-            _delay_us(1);
-        }
-
-    }
-}
-
-void display_bourrin(uint16_t data, int time_us){
+void display_bourrin(uint16_t data, long time_us){
     LEDS_off();
     data_send_bourrin(data);
-    //set_brightness(percentage, time_ms);
     LEDS_on();
-    for (int i = 0; i < time_us; i++)
+    for (long i = 0; i < time_us; i++)
     {
         _delay_us(1);
     }
