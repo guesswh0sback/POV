@@ -17,8 +17,8 @@
 void HALL_init();
 void INT0_handler();
 
-int get_duration();
+int get_revolution_t();
 uint8_t get_known_position();
-uint16_t get_current_angle();
+uint16_t get_t_last_zero();
 
 #endif /* HALL_H */

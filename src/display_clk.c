@@ -12,7 +12,8 @@ static time *current_time = NULL;
 
 // Angle réel calculé depuis le passage à l'aimant
 static uint16_t current_angle_real = 0;
-/* --- Calcul de l'angle réel du rotor en degrés --- */
+
+//--- Calcul de l'angle réel du rotor en degrés --- 
 uint16_t get_current_angle()
 {
     // Si on vient de passer devant l'aimant, on est à l'angle 0°
@@ -20,7 +21,7 @@ uint16_t get_current_angle()
         current_angle_real = 0;
         return 0;
     }
-    int revolution_t = get_duration();
+    int revolution_t = get_revolution_t();
     uint16_t t_last_zero = get_t_last_zero();
 
     // --- Conversion de la durée du tour complet en ticks ---

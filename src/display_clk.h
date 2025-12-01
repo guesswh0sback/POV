@@ -19,6 +19,7 @@ typedef enum {
 
 void display_clk();
 
+uint16_t get_current_angle();
 uint16_t set_angle(needleType needle, time * current_time);
 void display_needle(needleType needle);
 void display_outlines();
