@@ -82,12 +82,12 @@ void set_brightness(float percentage, int time_ms){
         for (int i = 0; i < period-(int)(percentage*period); i++){
             _delay_us(1);
         }
-
     }
 }
 
 void display_bourrin(uint16_t data, float percentage, int time_ms){
-    LEDS_off();
+    //LEDS_off();
     data_send_bourrin(data);
-    set_brightness(percentage, time_ms);
+    //set_brightness(percentage, time_ms);
+    LEDS_on();
 }
