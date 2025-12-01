@@ -9,8 +9,12 @@ volatile uint8_t known_position = 0;  // Flag pour indiquer passage devant l'aim
 
 ISR(INT0_vect)
 {
+    //test detection hall simple//
     display_bourrin(0b1111111111111111, 10);
     LEDS_off();
+    // fin test detection hall simple//
+
+
     //INT0_handler();
 }
 
