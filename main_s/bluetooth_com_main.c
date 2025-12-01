@@ -20,8 +20,8 @@ int main(void){
         {
             for (int i = 0; i < 10; i++)
             {
-                display_bourrin(0b1010101010101010, 0.005, 50);
-                display_bourrin(0b0101010101010101, 0.005, 50);
+                display_bourrin(0b1010101010101010, 5000);
+                display_bourrin(0b0101010101010101, 5000);
             }
             // Print the received byte
             USART_send_byte(c);
