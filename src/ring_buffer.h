@@ -20,4 +20,6 @@ bool ring_buffer_full(ring_buffer*ring_buffer);
 bool ring_buffer_push(ring_buffer *ring_buffer, uint8_t data);
 bool ring_buffer_pop(ring_buffer *ring_buffer, uint8_t *data);
 
+int size_of_data(ring_buffer * ring_buffer);
+
 #endif

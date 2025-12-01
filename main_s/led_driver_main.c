@@ -25,23 +25,23 @@ int main(void) {
         SPI_init();
     while (1)
     {  
-        display_bourrin(A, 0.005, 1000);
-        display_bourrin(B, 0.005, 1000);
-        display_bourrin(C, 0.005, 1000);
-        display_bourrin(D, 0.005, 1000);
-        display_bourrin(E, 0.005, 1000);
-        display_bourrin(F, 0.005, 1000);
-        display_bourrin(G, 0.005, 1000);
-        display_bourrin(H, 0.005, 1000);
-        display_bourrin(I, 0.005, 1000);
-        display_bourrin(J, 0.005, 1000);
-        display_bourrin(K, 0.005, 1000);
-        display_bourrin(L, 0.005, 1000);
-        display_bourrin(M, 0.005, 1000);
-        display_bourrin(N, 0.005, 1000);
-        display_bourrin(O, 0.005, 1000);
-        display_bourrin(P, 0.005, 1000);
-            
+        //display_bourrin(A, 0.005, 100);
+        //display_bourrin(B, 0.005, 100);
+        //display_bourrin(C, 0.005, 100);
+        //display_bourrin(D, 0.005, 100);
+        //display_bourrin(E, 0.005, 100);
+        //display_bourrin(F, 0.005, 100);
+        //display_bourrin(G, 0.005, 100);
+        //display_bourrin(H, 0.005, 100);
+        //display_bourrin(I, 0.005, 100);
+        //display_bourrin(J, 0.005, 100);
+        //display_bourrin(K, 0.005, 100);
+        //display_bourrin(L, 0.005, 100);
+        //display_bourrin(M, 0.005, 100);
+        //display_bourrin(N, 0.005, 100);
+        //display_bourrin(O, 0.005, 100);
+        //display_bourrin(P, 0.005, 100);
+        LEDS_off();  
     }
 
     return(0);

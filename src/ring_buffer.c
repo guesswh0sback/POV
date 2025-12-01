@@ -33,3 +33,7 @@ bool ring_buffer_pop(ring_buffer *ring_buffer, uint8_t *data) { // write out of 
     ring_buffer->count--;
     return true;
 }
+
+int size_of_data(ring_buffer * ring_buffer){
+    return (ring_buffer->head - ring_buffer->tail);
+}

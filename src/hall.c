@@ -1,49 +1,71 @@
 #include "hall.h"
-int time_per_frame = 1000; //ms
-uint8_t known_position = 0; //flag for 
 
+uint8_t buffer[12];
+/* --- Variables globales --- */
+int time_per_frame = 7500;           // Durée d'un tour complet en us (ajustée dynamiquement)
+volatile uint8_t known_position = 0;  // Flag pour indiquer passage devant l'aimant
+/* --- ISR pour l'interruption INT0 (capteur Hall) --- */
+
+volatile uint32_t last_time = 0;
+volatile uint32_t current_time = 0;
+volatile uint32_t delta_time = 0;
+
+volatile uint32_t timer0_overflow_count = 0;
+
+ISR(TIMER0_OVF_vect)
+{
+    timer0_overflow_count++;
+}
 
 ISR(INT0_vect)
 {
+    display_bourrin(0b1111111111111111, 1);
     INT0_handler();
 }
 
+/* --- Initialisation du capteur Hall --- */
 void HALL_init()
 {
-    // --- TIMER1 as free-running 16-bit counter ---
-    TCCR1A = 0;
-    TCCR1B = (1 << CS11);   // prescaler = 8 → tick = 0.5 µs at 16 MHz
+    TCCR0A = 0;               // Normal mode
+    TCCR0B = (1 << CS01) | (1 << CS00);  // Prescaler = 64
 
-    // --- INT0 on rising edge ---
+    TIMSK0 = (1 << TOIE0);    // Enable overflow interrupt
+    TCNT0 = 0;                // Start at 0
+    
+    // --- INT0 sur front montant ---
     EICRA = (1 << ISC01) | (1 << ISC00);
     EIMSK = (1 << INT0);
 
-    sei();
+    sei(); // Activer les interruptions globales
 }
 
+
+
 void INT0_handler(){
+
     display_index * index = get_display_index(); // function from display
     if(index->index < index->max_index & !index->overflow){ // if display did not have the time to parse all the image
         // USART_send_string("inf trigd\r\n"); //debug
-        time_per_frame -= (int) time_per_frame/8; // lowers the time per frame
+        time_per_frame -= (int) time_per_frame*0.01; // lowers the time per frame
     }
-    else if(index->overflow) // if display parsed to rapidly the image
-    {
+    else if(index->overflow){ // if display parsed to rapidly the image
         // USART_send_string("sup trigd\r\n"); //debug
-        time_per_frame += (int) time_per_frame/8; // increase the time per frame
+        time_per_frame += (int) time_per_frame*0.01; // increase the time per frame
     }  
     known_position = 1; //if interruption is triggered the position is known    
 }
 
 int get_duration(){ // return time_per_frame updated by interrupt handler
-    // snprintf(buffer, 12, "TpF: %d\r\n", time_per_frame);
-    // USART_send_string(buffer);
+/* --- Retourne la durée actuelle d'un tour complet --- */
     return time_per_frame;
 }
-uint8_t get_known_position(){ // checks if POV is at the known position 
-    if (known_position) //if it is
-    {
-        return known_position--; //return 1 because handler set flag and then resets it to 0
+
+/* --- Retourne si on vient de passer devant l'aimant --- */
+uint8_t get_known_position()
+{
+    if (known_position){
+        known_position = 0; // reset pour la prochaine lecture
+        return 1;
     }
-    return 0; //return 0 if it is not 
+    return 0;
 }

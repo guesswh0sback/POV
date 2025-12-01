@@ -1,10 +1,10 @@
 #include "../src/display_img.h"
 #include "../src/uart_interrupt.h"
 uint16_t image[] = {
-(uint16_t) 0b1111000000000000,
-(uint16_t) 0b0000111100000000,
-(uint16_t) 0b0000000011110000,
-(uint16_t) 0b0000000000001111
+(uint16_t) 0b1111111100000000,
+(uint16_t) 0b0000000011111111,
+(uint16_t) 0b1111111100000000,
+(uint16_t) 0b0000000011111111
 };
 
 #define BAUDRATE 38400
@@ -18,11 +18,6 @@ int main(){
 
     SPI_init();
     USART_send_string("LEDS initialized\n\r");
-                for (int i = 0; i < 10; i++)
-            {
-                display_bourrin(0b1010101010101010, 0.005, 50);
-                display_bourrin(0b0101010101010101, 0.005, 50);
-            }
     HALL_init();
     USART_send_string("HALL initialized\n\r");
 

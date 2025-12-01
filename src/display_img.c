@@ -1,7 +1,8 @@
 #include "display_img.h"
 
-display_index * DISPLAY_INDEX = 0;
+uint8_t buffer[12];
 
+display_index * DISPLAY_INDEX = 0;
 void set_addr_display_index(display_index * INDEX){
     DISPLAY_INDEX = INDEX;
 }
@@ -23,15 +24,20 @@ void check_INDEX(display_index * INDEX){
     {
         set_display_index(INDEX, INDEX->max_index);
     }
-    
-    
 }
 
 void display_image(uint16_t *image, display_index * INDEX){
     while (1) // equivalent to a while true because of check_index
     {
         check_INDEX(INDEX);
-        display_bourrin(image[INDEX->index], 0.5, INDEX->time); // display current frame
+        snprintf(buffer, 12, "tpf:%d\n\r", INDEX->time);
+        USART_send_string(buffer);
+        display_bourrin(image[INDEX->index], (int)(INDEX->time/INDEX->max_index)); // display current frame
+        for (int i = 0; i < INDEX->time; i++)
+        {
+            _delay_us(1);
+        }
+        
         INDEX->index ++;
         }  
 }
