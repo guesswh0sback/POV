@@ -95,16 +95,9 @@ uint16_t compute_final_mask(uint16_t current_angle, uint16_t minute_angle, uint1
 
 // --- Fonction principale d'affichage POV ---
 void display_clk() {
-    static uint16_t fake_angle = 0;
+    // static uint16_t fake_angle = 0;
     uint16_t current_angle;
-
-    // Angle réel si l'interruption Hall a été déclenchée, sinon angle "fake"
-    if (get_known_position()) {
-        current_angle = get_current_angle();
-    } else {
-        current_angle = fake_angle;
-        fake_angle = (fake_angle + 5) % 360;
-    }
+    current_angle = get_current_angle();
 
     // Mise à jour du temps
     current_time = get_time();
