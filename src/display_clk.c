@@ -14,32 +14,36 @@ static time *current_time = NULL;
 static uint16_t current_angle_real = 0;
 
 //--- Calcul de l'angle réel du rotor en degrés --- 
-uint16_t get_current_angle()
-{
-    // Si on vient de passer devant l'aimant, on est à l'angle 0°
-    if (get_known_position()){
+// Calcul de l'angle réel du rotor en degrés, 0° = passage devant l'aimant
+uint16_t get_current_angle() {
+    if (get_known_position()) {
         current_angle_real = 0;
         return 0;
     }
-    int revolution_t = get_revolution_t();
-    uint16_t t_last_zero = get_t_last_zero();
 
-    // --- Conversion de la durée du tour complet en ticks ---
-    // 1 tick = 0.615 µs → 1 ms ≈ 1626 ticks
-    uint32_t ticks_per_frame = (uint32_t)revolution_t * 1626UL;
+    int rev_t = get_revolution_t();    // durée d'un tour complet en ms
+    uint16_t last_zero = get_t_last_zero(); // moment du dernier passage
 
-    // Temps par degré en ticks
-    uint32_t ticks_per_degree = ticks_per_frame / 360UL;
-
-    // Temps écoulé depuis le dernier passage à l'aimant
+    // Temps écoulé depuis dernier passage (en ticks)
     uint16_t now = TCNT1;
-    uint32_t ticks_elapsed = (uint32_t)now - (uint32_t)t_last_zero;
+    uint16_t delta_ticks;
 
-    // Calcul de l'angle réel
-    current_angle_real = (uint16_t)(ticks_elapsed / ticks_per_degree);
-    if(current_angle_real >= 360) current_angle_real %= 360;
+    if (now >= last_zero) {
+        delta_ticks = now - last_zero;
+    } else {
+        // overflow du timer
+        delta_ticks = (0xFFFF - last_zero) + now + 1;
+    }
 
-    return current_angle_real;
+    // Conversion en ms
+    uint32_t delta_ms = ((uint32_t)delta_ticks * 8) / 13000UL; // prescaler = 8, F_CPU = 13MHz
+
+    // Calcul de l'angle
+    uint16_t angle = (uint16_t)((delta_ms * 360UL) / rev_t);
+    if (angle >= 360) angle %= 360;
+
+    current_angle_real = angle;
+    return angle;
 }
 
 // --- Masque pour une aiguille ---
@@ -73,21 +77,20 @@ uint16_t compute_final_mask(uint16_t current_angle, uint16_t minute_angle, uint1
     uint16_t mask = DIAL_MASK; // toujours afficher le cadran
 
     // Landmarks : tout sauf aux multiples de 30°
-    if (!ANGLE_EQ(current_angle % 360, 0, 2) &&
-        !ANGLE_EQ(current_angle % 30, 0, 2)) {
+    if (!ANGLE_EQ(current_angle % 30, 0, 5)) {
         mask |= LANDMARK_MASK;
     }
 
     // Widemarks : uniquement aux multiples de 90°
-    if (ANGLE_EQ(current_angle % 90, 0, 2)) {
+    if (ANGLE_EQ(current_angle % 90, 0, 5)) {
         mask |= WIDEMARK_MASK;
     }
 
     // Aiguilles
-    if (ANGLE_EQ(current_angle, minute_angle, 5)) {
+    if (ANGLE_EQ(current_angle, minute_angle, 10)) {
         mask |= get_needle_mask(NEEDLE_MINUTE);
     }
-    if (ANGLE_EQ(current_angle, hour_angle, 5)) {
+    if (ANGLE_EQ(current_angle, hour_angle, 10)) {
         mask |= get_needle_mask(NEEDLE_HOUR);
     }
     return mask;
@@ -100,11 +103,17 @@ void display_clk() {
     current_angle = get_current_angle();
 
     // Mise à jour du temps
-    current_time = get_time();
+    //current_time = get_time();
     //if (!current_time) return; // rien à afficher pour l'instant
 
-    uint16_t minute_angle = set_angle(NEEDLE_MINUTE, current_time);
-    uint16_t hour_angle   = set_angle(NEEDLE_HOUR, current_time);
+    // --- Heure fixe 3h40 ---
+    time current_time;
+    current_time.h = 3;
+    current_time.m = 40;
+    current_time.s = 0;
+
+    uint16_t minute_angle = set_angle(NEEDLE_MINUTE, &current_time);
+    uint16_t hour_angle   = set_angle(NEEDLE_HOUR, &current_time);
 
     // Calcul du masque final pour cet angle
     uint16_t final_mask = compute_final_mask(current_angle, minute_angle, hour_angle);

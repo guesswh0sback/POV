@@ -41,7 +41,7 @@ void HALL_init()
     TCCR1B = (1 << CS11); // prescaler = 8 → tick = 8/13MHz ≈ 0.615µs
 
     // --- INT0 sur front montant ---
-    EICRA = (1 << ISC01) | (1 << ISC00);
+    EICRA = (1 << ISC01) | (11 << ISC00); //  
     EIMSK = (1 << INT0);
 
     sei(); // Activer les interruptions globales

@@ -24,22 +24,36 @@ void timer1_init_1s(time * time)
     sei();
 }
 
+void timer_init(time * time, int h, int m, int s){
+    time->h = h;
+    time->m = m;
+    time->s = s;
+}
+
 void timer_update(time * time){
     time->s++;
-    if (time->s & 60)
+    if (!(time->s%60))
     {
         time->s = 0;
         time->m++;
     }
-    if (time->m & 60)
+    if (!(time->m%60) & time->m != 0) // protection against case when min = 0 then 0%60 -> 0
     {
         time->m = 0;
         time->h++;
     }
-    if (time->h & 24)
+    if (!(time->h%24))
     {
         time->h = 0;
     } 
+    // debug //
+    // char buffer[12];
+    // snprintf(buffer, 12, "%dh", time->h);
+    // USART_send_string(buffer);
+    // snprintf(buffer, 12, "%dm", time->m);
+    // USART_send_string(buffer);
+    // snprintf(buffer, 12, "%ds\r\n", time->s);
+    // USART_send_string(buffer);
 }
 
 ISR(TIMER1_COMPA_vect){
