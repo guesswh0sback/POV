@@ -6,32 +6,17 @@ int time_per_frame = 7500;           // Durée d'un tour complet en us (ajustée
 volatile uint8_t known_position = 0;  // Flag pour indiquer passage devant l'aimant
 /* --- ISR pour l'interruption INT0 (capteur Hall) --- */
 
-volatile uint32_t last_time = 0;
-volatile uint32_t current_time = 0;
-volatile uint32_t delta_time = 0;
-
-volatile uint32_t timer0_overflow_count = 0;
-
-ISR(TIMER0_OVF_vect)
-{
-    timer0_overflow_count++;
-}
 
 ISR(INT0_vect)
 {
-    display_bourrin(0b1111111111111111, 1);
-    INT0_handler();
+    display_bourrin(0b1111111111111111, 10);
+    LEDS_off();
+    //INT0_handler();
 }
 
 /* --- Initialisation du capteur Hall --- */
 void HALL_init()
-{
-    TCCR0A = 0;               // Normal mode
-    TCCR0B = (1 << CS01) | (1 << CS00);  // Prescaler = 64
-
-    TIMSK0 = (1 << TOIE0);    // Enable overflow interrupt
-    TCNT0 = 0;                // Start at 0
-    
+{   
     // --- INT0 sur front montant ---
     EICRA = (1 << ISC01) | (1 << ISC00);
     EIMSK = (1 << INT0);
