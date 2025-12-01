@@ -5,7 +5,7 @@ PORT = /dev/ttyACM0
 PROGRAMMER = usbasp
 
 # MAIN SELECTION 
-MAIN ?= led_driver_main.c
+MAIN ?= display_img_main.c
 
 # Directory structure
 BUILD_DIR = build
@@ -20,9 +20,9 @@ OBJS = $(SRCS:%.c=$(BUILD_DIR)/%.o) # transforme chaque src/.c en build/src/.o
 MAIN_OBJ = $(BUILD_DIR)/$(MAIN_DIR)/$(MAIN:.c=.o) # crée le chemin de l'objet principal (compilé séparément)
 
 # Output files
-TARGET := $(basename $(MAIN)) # le nom sans .c
-ELF := $(BUILD_DIR)/$(TARGET).elf
-BIN := $(BUILD_DIR)/$(TARGET).bin
+# Derive ELF/BIN directly from MAIN to avoid basename/whitespace issues
+ELF := $(BUILD_DIR)/$(MAIN:.c=.elf)
+BIN := $(BUILD_DIR)/$(MAIN:.c=.bin)
 
 # Compiler flags
 CFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os
@@ -58,7 +58,7 @@ $(BIN): $(ELF)
 	avr-objcopy -O ihex -R .eeprom "$(ELF)" "$(BIN)"
 
 # Téléversement
-install: $(BIN)
+install: clean all $(BIN)
 ifeq ($(OS),Windows_NT)
 	@avrdude -v -p $(MCU) -c $(PROGRAMMER) -U flash:w:$(BIN):i
 else

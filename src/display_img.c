@@ -1,22 +1,25 @@
 #include "display_img.h"
 
-display_index * DISPLAY_INDEX;
+display_index * DISPLAY_INDEX = 0;
 
+void set_addr_display_index(display_index * INDEX){
+    DISPLAY_INDEX = INDEX;
+}
 
 void set_display_index(display_index * INDEX, int max){
     INDEX->index = 0; // reset index to the begining
     INDEX->max_index = max; // set max
     INDEX->overflow = 0; // reset overflow flag
-    INDEX->time = get_time(); // use hall function do set a new time per frame
+    INDEX->time = get_duration(); // use hall function do set a new time per frame
 }
 
 void check_INDEX(display_index * INDEX){
-    if (INDEX->max_index<INDEX->index) //handles overflow
+    if (INDEX->index ==  INDEX->max_index) //handles overflow
     {
         INDEX->overflow = 1; // set overflow flag
-        INDEX->index = INDEX->max_index; // cap index to avoid going out og the image
+        INDEX->index = INDEX->max_index -1; // cap index to avoid going out og the image
     }
-    if (get_known_position) // back to a position where the image can begin anew
+    if (get_known_position()) // back to a position where the image can begin anew
     {
         set_display_index(INDEX, INDEX->max_index);
     }
@@ -24,13 +27,13 @@ void check_INDEX(display_index * INDEX){
     
 }
 
-void display_image(uint16_t image[], display_index * INDEX){
-    while (!INDEX->overflow) // equivalent to a while true because of check_index
+void display_image(uint16_t *image, display_index * INDEX){
+    while (1) // equivalent to a while true because of check_index
     {
         check_INDEX(INDEX);
-        display_bourrin(image[INDEX->index], 0.0005, INDEX->time); // display current frame
+        display_bourrin(image[INDEX->index], 0.5, INDEX->time); // display current frame
         INDEX->index ++;
-    }  
+        }  
 }
 
 display_index * get_display_index(){ // used for hall functions

@@ -6,9 +6,8 @@
 #include <util/delay.h>
 #include <stdio.h>
 
-#include "uart_basic.h"
+#include "uart_interrupt.h"
 #include "display_img.h"
-#include "driver.h"
 
 
 void HALL_init();

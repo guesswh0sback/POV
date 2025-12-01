@@ -25,4 +25,6 @@ void display_image(uint16_t image[], display_index * INDEX);
 
 display_index * get_display_index(); //used for hall functions
 
+void set_addr_display_index(display_index * INDEX);
+
 #endif
