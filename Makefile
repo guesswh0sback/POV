@@ -5,7 +5,7 @@ PORT = /dev/ttyACM0
 PROGRAMMER = usbasp
 
 # MAIN SELECTION 
-MAIN ?= bluetooth_com_main.c
+MAIN ?= display_img_main.c
 
 # Directory structure
 BUILD_DIR = build

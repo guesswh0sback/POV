@@ -1,6 +1,6 @@
 #include "display_img.h"
 
-uint8_t buffer[12];
+uint8_t buffer[16];
 
 display_index * DISPLAY_INDEX = 0;
 void set_addr_display_index(display_index * INDEX){
@@ -15,14 +15,15 @@ void set_display_index(display_index * INDEX, int max){
 }
 
 void check_INDEX(display_index * INDEX){
+    if (get_known_position()) // back to a position where the image can begin anew
+    {
+        set_display_index(INDEX, INDEX->max_index);
+        USART_send_string("\n\r");
+    }
     if (INDEX->index ==  INDEX->max_index) //handles overflow
     {
         INDEX->overflow = 1; // set overflow flag
         INDEX->index = INDEX->max_index -1; // cap index to avoid going out og the image
-    }
-    if (get_known_position()) // back to a position where the image can begin anew
-    {
-        set_display_index(INDEX, INDEX->max_index);
     }
 }
 
@@ -30,15 +31,16 @@ void display_image(uint16_t *image, display_index * INDEX){
     while (1) // equivalent to a while true because of check_index
     {
         check_INDEX(INDEX);
-        snprintf(buffer, 12, "tpf:%d\n\r", INDEX->time);
-        USART_send_string(buffer);
-        display_bourrin(image[INDEX->index], (int)(INDEX->time/INDEX->max_index)); // display current frame
-        for (int i = 0; i < INDEX->time; i++)
-        {
+        USART_send_byte(INDEX->index+'0');
+        display_bourrin(image[INDEX->index], 1); // display current frame
+        LEDS_off();
+        for (int i = 0; i < INDEX->time; i++) // il est la le probleme 
+        {            
             _delay_us(1);
         }
         
         INDEX->index ++;
+
         }  
 }
 

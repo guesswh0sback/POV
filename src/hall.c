@@ -1,8 +1,8 @@
 #include "hall.h"
 
-uint8_t buffer[12];
+uint8_t buffer[16];
 /* --- Variables globales --- */
-int time_per_frame = 7500;           // Durée d'un tour complet en us (ajustée dynamiquement)
+int time_for_one_turn = 7500;           // Durée d'un tour complet en us (ajustée dynamiquement)
 volatile uint8_t known_position = 0;  // Flag pour indiquer passage devant l'aimant
 /* --- ISR pour l'interruption INT0 (capteur Hall) --- */
 
@@ -10,12 +10,10 @@ volatile uint8_t known_position = 0;  // Flag pour indiquer passage devant l'aim
 ISR(INT0_vect)
 {
     //test detection hall simple//
-    display_bourrin(0b1111111111111111, 10);
-    LEDS_off();
+    // display_bourrin(0b1111111111111111, 10);
+    // LEDS_off();
     // fin test detection hall simple//
-
-
-    //INT0_handler();
+    INT0_handler();
 }
 
 /* --- Initialisation du capteur Hall --- */
@@ -31,22 +29,24 @@ void HALL_init()
 
 
 void INT0_handler(){
-
+    
     display_index * index = get_display_index(); // function from display
-    if(index->index < index->max_index & !index->overflow){ // if display did not have the time to parse all the image
-        // USART_send_string("inf trigd\r\n"); //debug
-        time_per_frame -= (int) time_per_frame*0.01; // lowers the time per frame
-    }
-    else if(index->overflow){ // if display parsed to rapidly the image
-        // USART_send_string("sup trigd\r\n"); //debug
-        time_per_frame += (int) time_per_frame*0.01; // increase the time per frame
+
+    if(index->overflow){ // if display parsed to rapidly the image
+        time_for_one_turn += (int) time_for_one_turn*0.002; // increase the time per frame
+        // USART_send_string("trigd_over\r\n");
     }  
-    known_position = 1; //if interruption is triggered the position is known    
+
+    else if(index->index < index->max_index-1){ // if display did not have the time to parse all the image
+        time_for_one_turn -= (int) time_for_one_turn*0.001; // lowers the time per frame
+        // USART_send_string("trigd_undr\r\n");
+    }
+    known_position = 1; //if interruption is triggered the position is known   
 }
 
-int get_duration(){ // return time_per_frame updated by interrupt handler
+int get_duration(){ // return time_for_one_turn updated by interrupt handler
 /* --- Retourne la durée actuelle d'un tour complet --- */
-    return time_per_frame;
+    return time_for_one_turn;
 }
 
 /* --- Retourne si on vient de passer devant l'aimant --- */

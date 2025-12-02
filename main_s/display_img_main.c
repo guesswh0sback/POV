@@ -1,10 +1,10 @@
 #include "../src/display_img.h"
 #include "../src/uart_interrupt.h"
 uint16_t image[] = {
-(uint16_t) 0b1111111100000000,
-(uint16_t) 0b0000000011111111,
-(uint16_t) 0b1111111100000000,
-(uint16_t) 0b0000000011111111
+(uint16_t) 0b1111000000001111,
+(uint16_t) 0b1111111111111111,
+(uint16_t) 0b1111111111111111,
+(uint16_t) 0b1111111111111111
 };
 
 #define BAUDRATE 38400
@@ -23,6 +23,9 @@ int main(){
 
     set_display_index(&index_img, 4);
     set_addr_display_index(&index_img);
+
+    display_bourrin(0b1010101010101010, 5000);
+
     display_image(image, &index_img);
     return 0;
 }
