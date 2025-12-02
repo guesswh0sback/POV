@@ -12,6 +12,7 @@ void set_display_index(display_index * INDEX, int max){
     INDEX->max_index = max; // set max
     INDEX->overflow = 0; // reset overflow flag
     INDEX->time = get_duration(); // use hall function do set a new time per frame
+    INDEX->time = get_duration(); // use hall function do set a new time per frame
 }
 
 void check_INDEX(display_index * INDEX){
@@ -24,7 +25,14 @@ void check_INDEX(display_index * INDEX){
     {
         INDEX->overflow = 1; // set overflow flag
         INDEX->index = INDEX->max_index -1; // cap index to avoid going out og the image
+        INDEX->index = INDEX->max_index -1; // cap index to avoid going out og the image
     }
+    if (get_known_position) // back to a position where the image can begin anew
+    {
+        set_display_index(INDEX, INDEX->max_index);
+    }
+    
+    
 }
 
 void display_image(uint16_t *image, display_index * INDEX){
